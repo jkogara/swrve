@@ -9,3 +9,6 @@ doc/*
 Gemfile.lock
 log/*
 pkg/*
+tags/*
+tmp/*
+.idea/*
