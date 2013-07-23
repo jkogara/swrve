@@ -1,5 +1,4 @@
 require 'JSON'
-require 'swrve/middleware/cache'
 require 'swrve/middleware/http'
 
 module Swrve
@@ -12,7 +11,7 @@ module Swrve
       def_instance_delegator :@api_endpoint, :post
 
       def initialize
-        @api_endpoint    = Swrve::Middleware::Http.new(Swrve.config.api_url)
+        @api_endpoint    = Swrve::Middleware::Http.new(Swrve.config.api_url + "/#{Swrve.config.api_version}")
         @web_app_version = Swrve.config.web_app_version
         @api_key         = Swrve.config.api_key
       end
@@ -51,13 +50,14 @@ module Swrve
         validate_amount(given_amount, given_currency)
         payload = fill_nil_values(payload)
         
-        post('currency_given', query_options(uuid, { given_currency: given_currency, given_amount: given_amount,
-                                                     swrve_payload: payload}))
-
+        post('currency_given', query_options(uuid, { given_currency: given_currency, 
+                                                     given_amount: given_amount,
+                                                     swrve_payload: payload }))
       end
 
       def create_event(uuid, name, payload = {})
         params = query_options(uuid, name: name, swrve_payload: fill_nil_values(payload))
+
         post('event', params)
       end
 

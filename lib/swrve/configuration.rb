@@ -1,10 +1,9 @@
 require 'faraday'
-require 'dalli'
 
 module Swrve
   class Configuration
     attr_accessor :ab_test_url, :api_url, :web_app_version, :api_key, :local_resource_path, :game_id, :debug_url,
-                  :load_local_resources, :debug, :http_adapter, :cache_adapter, :cache_config
+                  :load_local_resources, :debug, :http_adapter, :api_version, :resource_timeout
 
     def initialize
       @ab_test_url = 'https://abtest.swrve.com'
@@ -12,8 +11,8 @@ module Swrve
       @web_app_version = '1.0'
       @debug_url = 'https://debug.api.swrve.com'
       @http_adapter = Faraday.default_adapter
-      @cache_adapter = Dalli::Client
-      @cache_config = {}
+      @api_version  = 1
+      @resource_timeout = 4
     end
   end
 end

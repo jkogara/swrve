@@ -15,7 +15,6 @@ module Swrve
         @client = Faraday.new(endpoint) do |faraday|
           faraday.request :url_encoded
           faraday.adapter Swrve.config.http_adapter
-          faraday.response :raise_error
           faraday.use FaradayMiddleware::ParseJson
         end
       end

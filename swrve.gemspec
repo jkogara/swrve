@@ -15,7 +15,6 @@ Gem::Specification.new do |gem|
   gem.add_dependency 'faraday', ['~> 0.8', '< 0.10']
   gem.add_dependency 'faraday_middleware', ['~> 0.8', '< 0.10']
   gem.add_dependency 'multi_json', '~> 1.0'
-  gem.add_dependency 'dalli'
 
   gem.add_development_dependency 'bundler', '~> 1.3'
   gem.add_development_dependency 'rake'

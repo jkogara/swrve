@@ -5,12 +5,10 @@ describe Swrve do
   subject { Swrve }
   let(:event_sender) { mock('event_sender') }
   let(:resource_getter) { mock('resource_getter') }
-  let(:cache) { mock('cache') }
 
   before do
     Swrve::Api::Events.stubs(new: event_sender)
     Swrve::Api::Resources.stubs(new: resource_getter)
-    Swrve::Middleware::Cache.any_instance.stubs(client: cache)
     Swrve.configure 
   end
 

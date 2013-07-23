@@ -4,7 +4,7 @@ module Swrve
   module Api
     describe Events do
       let(:http_middleware) { mock('http_middleware') }
-      let(:config) { stub_everything('config', web_app_version: '1', api_key: 'KEY', api_url: 'http://api_url') }
+      let(:config) { stub_everything('config', web_app_version: '1', api_version: 1, api_key: 'KEY', api_url: 'http://api_url') }
 
       before do
         Swrve.stubs(config: config)
@@ -12,7 +12,7 @@ module Swrve
 
       describe '.new' do
         it 'sets up the endpoint with the correct url' do
-          Swrve::Middleware::Http.expects(:new).with(config.api_url)
+          Swrve::Middleware::Http.expects(:new).with(config.api_url + "/#{config.api_version}")
 
           Swrve::Api::Events.new
         end
@@ -153,7 +153,52 @@ module Swrve
           end
         end
 
-        describe '#currency_given:'
+        describe '#currency_given' do
+          before { http_middleware.stubs(:post) }
+          
+          it 'validates the given_amount and the given_currency' do
+            subject.expects(:validate_amount).with(1, "USD")
+
+            subject.currency_given('UUID', 1, 'USD')
+          end
+
+          it 'builds the correct query options' do
+            subject.expects(:fill_nil_values).with({}).returns({}.to_json)
+            subject.expects(:query_options).with('UUID', { given_currency: 'USD', 
+                                                           given_amount: 1, 
+                                                           swrve_payload: {}.to_json })
+
+            subject.currency_given('UUID', 1, 'USD')
+          end
+
+          before { subject.stubs(:query_options).returns({}) }
+
+          it 'posts to the correct url' do
+            http_middleware.expects(:post).with('currency_given', {})
+
+            subject.currency_given('UUID', 1, 'Gold Coins')
+          end
+        end
+
+        describe '#create_event' do
+          
+          before { http_middleware.stubs(:post) }
+          
+          it 'builds the correct query options' do
+            subject.expects(:fill_nil_values).with({}).returns({}.to_json)
+            subject.expects(:query_options).with('UUID', {name: 'event_name', swrve_payload: {}.to_json})
+
+            subject.create_event('UUID', 'event_name')
+          end
+
+          before { subject.stubs(:query_options).returns({}) }
+
+          it 'posts to the correct url' do            
+            http_middleware.expects(:post).with('event', {})
+            
+            subject.create_event('UUID', 'event_name')
+          end
+        end
       end
     end
   end
