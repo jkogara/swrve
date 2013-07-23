@@ -1,4 +1,4 @@
-require 'JSON'
+require 'json'
 require 'swrve/middleware/http'
 
 module Swrve
