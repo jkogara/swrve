@@ -31,7 +31,6 @@ module Swrve
           subject.send(:get)
         end
       end
-
     end
   end
 end

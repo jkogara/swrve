@@ -3,6 +3,9 @@ require 'swrve/middleware/http'
 module Swrve
   module Api
     describe Events do
+
+      subject { Events.new }
+
       let(:http_middleware) { mock('http_middleware') }
       let(:config) { stub_everything('config', web_app_version: '1', api_version: 1, api_key: 'KEY', api_url: 'http://api_url') }
 
@@ -13,22 +16,22 @@ module Swrve
       describe '.new' do
         it 'sets up the endpoint with the correct url' do
           Swrve::Middleware::Http.expects(:new).with(config.api_url + "/#{config.api_version}")
-
-          Swrve::Api::Events.new
+  
+          subject
         end
 
         before { Swrve::Middleware::Http.stubs(new: http_middleware) }
 
         it 'sets the correct app_version' do
           config.expects(:web_app_version)
-
-          Swrve::Api::Events.new
+          
+          subject
         end
 
         it 'sets the correct api_key' do
           config.expects(:api_key)
 
-          Swrve::Api::Events.new
+          subject
         end
       end
 
@@ -37,8 +40,6 @@ module Swrve
           Swrve::Middleware::Http.stubs(new: http_middleware) 
           subject.stubs(query_options: {})
         end        
-
-        subject { Swrve::Api::Events.new }
 
         describe '#session_start' do
           it 'posts to the session_start endpoint' do
