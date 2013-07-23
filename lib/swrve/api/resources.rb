@@ -1,5 +1,4 @@
 require 'yaml'
-require 'ostruct'
 require 'forwardable'
 require 'JSON'
 require 'swrve/middleware/http'
@@ -16,7 +15,7 @@ module Swrve
       end
 
       def resource(uuid, test_name, timestamp = nil)
-        convert_to_bools(resources(uuid, timestamp).detect{ |exists| exists.uid == test_name } || OpenStruct.new({}))
+        convert_to_bools(resources(uuid, timestamp).detect{ |exists| exists.uid == test_name } || {})
       end
 
       def resources(uuid, timestamp = nil)
@@ -40,22 +39,19 @@ module Swrve
       end
 
       def remote_resources(uuid, full_resource, created_at = nil)
+        request  = full_resource ? 'user_resources' : 'user_resources_diff'
+        response = get(request, build_params(uuid, create))
 
-        params = {
+        response.status < 400 ? response.body : []
+      end
+
+      def build_params(uuid, created_at)
+        {
           user:        uuid,
           api_key:     Swrve.config.api_key,
           app_version: Swrve.config.web_app_version,
           joined:      (created_at || Time.now).to_i * 1000
         }
-
-        request  = full_resource ? 'user_resources' : 'user_resources_diff'
-        response = get(request, params)
-
-        if response.status < 400
-          response.body.map{|resource| OpenStruct.new(resource)}
-        else
-          []
-        end
       end
 
       def local_fixtures
@@ -68,7 +64,6 @@ module Swrve
           select { |test| test["enabled"] }.
           map { |test| test["variants"][test["selected"]] }
       end
-
     end
   end
 end
