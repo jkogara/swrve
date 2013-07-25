@@ -40,13 +40,15 @@ describe Swrve do
   end
 
   describe 'methods_delegated to event_sender' do
+    let(:event_sender) { Swrve::Api::Events.new }
     @delegated_events = [
-      :session_start, :session_end, :custom_event,
+      :session_start, :session_end, :create_event,
       :purchase, :buy_in, :currency_given, :update_user
     ]
 
     @delegated_events.each do |event|
       specify { subject.should respond_to(event) }
+      specify { event_sender.should respond_to(event) }
 
       it "send the #{event} request to the resources endpoint" do
         event_sender.expects(event)
@@ -54,13 +56,16 @@ describe Swrve do
         subject.send(event)
       end
     end
+    
   end
 
   describe 'methods_delegated to resource_getter' do
-    @delegated_events = [:resource, :resource_diff]
+    let(:resource_getter) { Swrve::Api::Resources.new }
+    @delegated_events = [:resource, :resources_diff, :resources]
 
     @delegated_events.each do |event|
       specify { subject.should respond_to(event) }
+      specify { resource_getter.should respond_to(event) }
 
       it "send the #{event} request to the resources endpoint" do
         resource_getter.expects(event)

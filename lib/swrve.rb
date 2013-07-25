@@ -10,10 +10,9 @@ module Swrve
     extend Forwardable
     
     attr_accessor :config, :event_sender, :resource_getter
-    
-    def_delegators :@resource_getter, :resources, :resource_diff, :resource
-    def_delegators :@event_sender,  :session_start, :session_end, :custom_event, :purchase, :buy_in, 
-                                           :currency_given, :update_user 
+
+    def_delegators :@resource_getter, :resources, :resources_diff, :resource
+    def_delegators :@event_sender, :session_start, :session_end, :create_event, :purchase, :buy_in, :currency_given, :update_user 
 
     def configure
       yield(config) if block_given?
