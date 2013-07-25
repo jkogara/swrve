@@ -8,7 +8,7 @@ require 'swrve/api/resources'
 module Swrve
   class << self
     extend Forwardable
-    
+
     attr_accessor :config, :event_sender, :resource_getter
 
     def_delegators :@resource_getter, :resources, :resources_diff, :resource
