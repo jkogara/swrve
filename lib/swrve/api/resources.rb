@@ -15,7 +15,7 @@ module Swrve
       end
 
       def resource(uuid, test_name, timestamp = nil)
-        convert_to_bools(resources(uuid, timestamp).detect{ |exists| exists.uid == test_name } || {})
+        convert_to_bools(resources(uuid, timestamp).detect{ |exists| exists['uid'] == test_name } || {})
       end
 
       def resources(uuid, timestamp = nil)
@@ -40,7 +40,7 @@ module Swrve
 
       def remote_resources(uuid, full_resource, created_at = nil)
         request  = full_resource ? 'user_resources' : 'user_resources_diff'
-        response = get(request, build_params(uuid, create))
+        response = get(request, build_params(uuid, created_at))
 
         response.status < 400 ? response.body : []
       end
