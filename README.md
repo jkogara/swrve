@@ -32,7 +32,7 @@ Swrve.session_end('user uuid')
 
 ### Resources 
 ```ruby
-json_resource = Swrve.resource(UniqueUserIdentifier, "ab_test_name")
+json_resource = Swrve.resource('user uuid', "ab_test_name")
 ```
 
 [Usage Examples]: #usage-examples
