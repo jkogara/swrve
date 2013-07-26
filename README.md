@@ -20,15 +20,19 @@ Swrve.configure do |config|
 end
 ```
 
-The Swrve API is split into two parts, Event Sending and Resource Getting
-
-Event Sending
+### Events
 ```ruby
-Swrve.create_event(UniqueUserIdentifier, "event.name.that.occurred")
+Swrve.session_start('user uuid')
+Swrve.create_event('user uuid', "custom.event.name.that.occurred")
+Swrve.purchase('user uuid', 'Item Id', 5)
+...
+...
+Swrve.session_end('user uuid')
 ```
-Resouce Getting
+
+### Resources 
 ```ruby
-Swrve.resource(UniqueUserIdentifier, "test_name_configured_at_swrve")
+json_resource = Swrve.resource(UniqueUserIdentifier, "ab_test_name")
 ```
 
 [Usage Examples]: #usage-examples

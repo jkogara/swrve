@@ -36,6 +36,8 @@ module Swrve
       end
 
       context 'Instance methods' do
+        let(:good_response) { mock('response', status: 200) }
+        
         before do
           Swrve::Middleware::Http.stubs(new: http_middleware) 
           subject.stubs(query_options: {})
@@ -43,11 +45,11 @@ module Swrve
 
         describe '#session_start' do
           it 'posts to the session_start endpoint' do
-            http_middleware.expects(:post).with('session_start', {})
+            http_middleware.expects(:post).with('session_start', {}).returns(good_response)
             subject.session_start('UUID')
           end
 
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response) }
 
           it 'prepares the query_options' do
             subject.expects(:query_options).with('UUID', swrve_payload: {}.to_json)
@@ -85,12 +87,12 @@ module Swrve
 
         describe '#update_user' do
           it 'posts to the user endpoint' do
-            http_middleware.expects(:post).with('user', {})
+            http_middleware.expects(:post).with('user', {}).returns(good_response)
 
             subject.update_user('UUID')
           end
 
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response) }
 
           it 'defaults user_initiated to being true' do
             subject.expects(:query_options).with('UUID', user_initiated: true, swrve_payload: {}.to_json)
@@ -107,12 +109,12 @@ module Swrve
 
         describe '#purchase' do
           it 'posts to the purchase endpoint' do
-            http_middleware.expects(:post).with('purchase', {})
+            http_middleware.expects(:post).with('purchase', {}).returns(good_response)
 
             subject.purchase('UUID', 1, 1)
           end
 
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response)}
 
           it 'defaults currency and quantity to the correct values' do
             subject.expects(:query_options).with('UUID', item: 1.to_s, cost: 1.to_f, currency: 'USD', quantity: 1)
@@ -129,12 +131,12 @@ module Swrve
 
         describe '#buy_in' do
           it 'posts to the buy_in endpoint' do
-            http_middleware.expects(:post).with('buy_in', {})
+            http_middleware.expects(:post).with('buy_in', {}).returns(good_response)
 
             subject.buy_in('UUID', 1, 'USD', 5, 'Gold Coins')
           end
 
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response) }
 
           it 'defaults payment_provider to Default Payment Provider' do
             subject.expects(:query_options).with('UUID', { cost: 1.to_f, local_currency: 'USD', reward_amount: 5.to_f, 
@@ -155,10 +157,10 @@ module Swrve
         end
 
         describe '#currency_given' do
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response) }
           
           it 'validates the given_amount and the given_currency' do
-            subject.expects(:validate_amount).with(1, "USD")
+            subject.expects(:validate_amount).with(1, "USD").returns(good_response)
 
             subject.currency_given('UUID', 1, 'USD')
           end
@@ -175,7 +177,7 @@ module Swrve
           before { subject.stubs(:query_options).returns({}) }
 
           it 'posts to the correct url' do
-            http_middleware.expects(:post).with('currency_given', {})
+            http_middleware.expects(:post).with('currency_given', {}).returns(good_response)
 
             subject.currency_given('UUID', 1, 'Gold Coins')
           end
@@ -183,7 +185,7 @@ module Swrve
 
         describe '#create_event' do
           
-          before { http_middleware.stubs(:post) }
+          before { http_middleware.stubs(:post).returns(good_response) }
           
           it 'builds the correct query options' do
             subject.expects(:fill_nil_values).with({}).returns({}.to_json)
@@ -195,7 +197,7 @@ module Swrve
           before { subject.stubs(:query_options).returns({}) }
 
           it 'posts to the correct url' do            
-            http_middleware.expects(:post).with('event', {})
+            http_middleware.expects(:post).with('event', {}).returns(good_response)
             
             subject.create_event('UUID', 'event_name')
           end

@@ -24,6 +24,9 @@ Gem::Specification.new do |gem|
   gem.add_development_dependency 'guard-rspec'
   gem.add_development_dependency 'guard-bundler'
   gem.add_development_dependency 'guard-ctags-bundler'
+  gem.add_development_dependency 'yard'
+  gem.add_development_dependency 'redcarpet'
+  gem.add_development_dependency 'github-markup'
 
 
   gem.files         = `git ls-files`.split($/)
