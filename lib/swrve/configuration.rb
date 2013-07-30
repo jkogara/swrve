@@ -8,10 +8,10 @@ module Swrve
     DEFAULT_ABTEST_ENDPOINT = 'abtest.swrve.com'
 
     def initialize
-      @app_version = '0.0'
-      @debug_url = 'https://debug.api.swrve.com'
-      @http_adapter = Faraday.default_adapter
-      @api_version  = 1
+      @app_version      = '0.0'
+      @debug_url        = 'https://debug.api.swrve.com'
+      @http_adapter     = Faraday.default_adapter
+      @api_version      = 1
       @resource_timeout = 4
     end
 
