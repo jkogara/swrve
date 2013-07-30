@@ -13,9 +13,13 @@ module Swrve
 
     def_delegators :@resource_getter, :resources, :resources_diff, :resource
     def_delegators :@event_sender, :session_start, :session_end, :create_event, :purchase, :buy_in, :currency_given, :update_user 
+    def_delegators :@event_sender, :session_start, :session_end, :create_event, :purchase, :buy_in, :currency_given, :update_user 
+    def_delegators :@config, :build_endpoints, :validate!
 
     def configure
       yield(config) if block_given?
+      validate!
+      build_endpoints
       @event_sender    = Swrve::Api::Events.new
       @resource_getter = Swrve::Api::Resources.new
     end

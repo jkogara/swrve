@@ -7,7 +7,7 @@ module Swrve
       subject { Events.new }
 
       let(:http_middleware) { mock('http_middleware') }
-      let(:config) { stub_everything('config', web_app_version: '1', api_version: 1, api_key: 'KEY', api_url: 'http://api_url') }
+      let(:config) { stub_everything('config', app_version: '1', api_version: 1, api_key: 'KEY', api_url: 'http://api_url') }
 
       before do
         Swrve.stubs(config: config)
@@ -23,7 +23,7 @@ module Swrve
         before { Swrve::Middleware::Http.stubs(new: http_middleware) }
 
         it 'sets the correct app_version' do
-          config.expects(:web_app_version)
+          config.expects(:app_version)
           
           subject
         end
