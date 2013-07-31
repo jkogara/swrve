@@ -49,7 +49,7 @@ module Swrve
         {
           user:        uuid,
           api_key:     Swrve.config.api_key,
-          app_version: Swrve.config.web_app_version,
+          app_version: Swrve.config.app_version,
           joined:      (created_at || Time.now).to_i * 1000
         }
       end

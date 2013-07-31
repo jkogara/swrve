@@ -11,9 +11,9 @@ module Swrve
       def_instance_delegator :@api_endpoint, :post
 
       def initialize
-        @api_endpoint    = Swrve::Middleware::Http.new(Swrve.config.api_url + "/#{Swrve.config.api_version}")
-        @web_app_version = Swrve.config.web_app_version
-        @api_key         = Swrve.config.api_key
+        @api_endpoint = Swrve::Middleware::Http.new(Swrve.config.api_url + "/#{Swrve.config.api_version}")
+        @app_version  = Swrve.config.app_version
+        @api_key      = Swrve.config.api_key
       end
 
       # Starts the user game session
@@ -87,7 +87,7 @@ module Swrve
       end
 
       def query_options(uuid, payload = {})
-        { api_key: @api_key, app_version: @web_app_version, user: uuid }.merge(payload) 
+        { api_key: @api_key, app_version: @app_version, user: uuid }.merge(payload) 
       end
 
       #The swrve api does not accept nul JSON values

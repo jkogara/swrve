@@ -3,16 +3,14 @@ require 'swrve/middleware/http'
 module Swrve
   module Api
     describe Resources do
-      
+
       subject { Resources.new }
-      
+
+      let(:config) { stub_everything('config', ab_test_url: 'http://ab_test_url', api_version: 1) }
+
+      before { Swrve.stubs(config: config) }
+
       describe '.new' do       
-        let(:config) { stub_everything('config', ab_test_url: 'http://ab_test_url', api_version: 1) }
-
-        before do
-          Swrve.stubs(config: config)
-        end
-
         it 'Creates a resources endpoint' do
           Middleware::Http.expects(:new).with([config.ab_test_url, 'api', config.api_version].join('/'))
 
@@ -27,7 +25,7 @@ module Swrve
 
         it 'delegates it to the resources endpoint' do
           resources_endpoint.expects(:get)
-          
+
           subject.send(:get)
         end
       end
