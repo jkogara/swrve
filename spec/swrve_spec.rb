@@ -22,7 +22,7 @@ describe Swrve do
     end
 
     it 'responds to required configurations' do
-      [:ab_test_url, :api_url, :app_version, :api_key, :local_resource_path, :game_id, :debug_url,
+      [:ab_test_url, :api_url, :app_version, :api_key, :local_resource_path, :game_id,
        :load_local_resources, :debug, :http_adapter].map do |value|
         Swrve.config.respond_to?(value)
       end.uniq.should == [true]
